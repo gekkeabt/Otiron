@@ -1,0 +1,42 @@
+<div class="section" ng-repeat="section in sections">
+    <h5 class="open-section">
+      <b ng-model="sectionName">{{section.text}}</b>
+      <span>
+        <span class="glyphicon glyphicon-remove" ng-click="removeSection(section._id,section.text)"></span>
+        <span class="glyphicon glyphicon-pencil" ng-click="showEditSection = ! showEditSection"></span>
+      </span>
+      <input class="EditSection" ng-model="sectionName" ng-show="showEditSection" type="text" placeholder="Press enter to save ;)" ng-keyup="$event.keyCode == 13 ? updateSection(section._id,sectionName,section.text) : null" style="margin-bottom:2.5px;margin-top:10px;"/>
+      </h5>
+    <span class="totalitems">
+        <span id="{{section.text}}" ondrop="drop(event)" ondragover="allowDrop(event)">Drop here
+        </span>
+        <div draggable="true" ondragstart="drag(event)" id="{{todo._id}}" class="item" ng-repeat="todo in todos|filter:{status:section.text}:true">
+            {{todo.text}}
+            <span class="glyphicon glyphicon-remove" ng-click="remove(todo._id)"></span>
+        </div>
+    </span>
+    <input type="text" placeholder="Enter task..." class="text-input" ng-model="text" ng-keyup="$event.keyCode == 13 ? TodoADD(section.text,text) : null">
+
+</div>
+<div class="section">
+    <h5 class="open-section">Add another section</h5>
+    <input class="EditSection" type="text" placeholder="Enter section name..." class="text-input" ng-model="sectaddt" ng-keyup="$event.keyCode == 13 ? SectionADD(sectaddt) : null">
+</div>
+<script>
+      function allowDrop(ev) {
+          ev.preventDefault();
+      }
+
+      function drag(ev) {
+          ev.dataTransfer.setData("value",ev.target.id);
+      }
+
+      function drop(ev) {
+          ev.preventDefault();
+          var value = ev.dataTransfer.getData("value");
+          var scope = angular.element(".collection").scope();
+          ev.target.appendChild(document.getElementById(value));
+          scope.update(value,ev.target.id);
+      }
+
+</script>
